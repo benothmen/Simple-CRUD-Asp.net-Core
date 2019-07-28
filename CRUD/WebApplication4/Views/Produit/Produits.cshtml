@@ -1,0 +1,108 @@
+﻿@model IEnumerable<TestAsp.Models.Produit>
+
+@{
+    ViewData["Title"] = "Produits";
+}
+
+
+
+<table class="table table-responsive table-condensed table-striped table-bordered">
+    
+    <caption>
+        <h2>Liste de produits</h2>
+        
+        <form asp-action="Index" method="get" class="navbar-form pull-right">
+            <div class="form-group">
+                <label  class="control-label"></label>
+                <input class="input-sm form-control" placeholder="Recherche" name="recherche" value="@ViewBag.recherche"/>
+               
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-eye-open"></span> Chercher
+            </button>
+        </form>
+        
+    </caption>
+
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Designation
+            </th>
+            <th>
+                Prix
+            </th>
+            <th>
+                Quantite
+            </th>
+            <th>
+                Categorie
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.ProduitID
+            </td>
+            <td>
+                @item.Designation
+            </td>
+            <td>
+                @item.Prix
+            </td>
+            <td>
+                @item.Quantite
+            </td>
+            <td>
+                @item.Categorie.NomCatgegorie
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProduitID">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.ProduitID">Affiche</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProduitID">Supprimer</a>
+            </td>
+
+        </tr>
+        }
+
+    </tbody>
+</table>
+<ul class="pagination pull-right">
+    @{
+        string classDisabled = "";
+        if (ViewBag.currentPage == 0)
+        {
+            classDisabled = "disabled";
+        }
+        <li class="@classDisabled previous"><a asp-action="Index" asp-route-page="@(ViewBag.currentPage - 1)" asp-route-recherche="@ViewBag.recherche"><span class="glyphicon glyphicon-backward"></span></a></li>
+    }
+    @{
+        for (int i = 0; i < ViewBag.totalPages; i++)
+        {
+            string className = "";
+            if (i == ViewBag.currentPage) { className = "active"; }
+            if (i == ViewBag.currentPage - 1 || i == ViewBag.currentPage || i == ViewBag.currentPage + 1)
+            {
+                <li class="@className"><a asp-action="Index" asp-route-page="@i" asp-route-recherche="@ViewBag.recherche">@(i + 1)</a></li>
+            }
+        }
+    }
+    @{
+        string classDisabl = "";
+        if (ViewBag.currentPage == ViewBag.totalPages-1)
+        {
+            classDisabl = "disabled";
+        }
+        <li class="@classDisabl next"><a asp-action="Index" asp-route-page="@(ViewBag.currentPage + 1)" asp-route-recherche="@ViewBag.recherche"><span class="glyphicon glyphicon-forward"></span></a></li>
+    }
+</ul>
+
